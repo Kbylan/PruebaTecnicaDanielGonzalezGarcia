@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    
+	
+	<!-- Flow -->
+	<flow name="practica_tecnica_mulesoft_2024_daniel_gonzalez_garciaFlow" doc:id="8d118e23-8b17-44e9-87d8-7cd04cfe75d8" >
+		<!-- HTTP Listener -->
+		<http:listener doc:name="Listener" doc:id="5a8a0626-fdd2-4a4e-908a-e19bf5ba29fb" config-ref="HTTP_Listener_config" path="/api/v1/sps/customers"/>
+		
+		<!-- Database Select Query -->
+		<db:select doc:name="Select" doc:id="907ae5cd-a60e-4c13-af8c-404769df9885" config-ref="Database_Config">
+			<db:sql><![CDATA[SELECT * FROM customers;]]></db:sql>
+		</db:select>
+		
+		<!-- Transform Message to JSON -->
+		<ee:transform doc:name="Transform Message" doc:id="51bda6ba-5caa-4101-8335-1391cc56eeb8" >
+			<ee:message >
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
